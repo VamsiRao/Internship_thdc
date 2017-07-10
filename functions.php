@@ -22,10 +22,10 @@
 	{
 		
 
-	   	$event_name=  @$_POST['event_name'];
-	   	$event_theme= @$_POST['event_theme'];
-	   	$event_date=  @$_POST['event_date'];
-	   	$event_venue= @$_POST['event_venue'];
+	   	$event_name=  $_POST['event_name'];
+	   	$event_theme= $_POST['event_theme'];
+	   	$event_date=  $_POST['event_date'];
+	   	$event_venue= $_POST['event_venue'];
 
 
 		$conn = connection();
@@ -49,10 +49,10 @@
 	function guest_details()
 	{
 		
-		$guest_name=    @$_POST['guest_name'];
-		$guest_emailid= @$_POST['guest_emailid'];
-		$phone_number=  @$_POST['phone_number'];
-		$guest_gender=  @$_POST['guest_gender'];
+		$guest_name=    $_POST['guest_name'];
+		$guest_emailid= $_POST['guest_emailid'];
+		$phone_number=  $_POST['phone_number'];
+		$guest_gender=  $_POST['guest_gender'];
 		
 		$conn = connection();
 		
@@ -91,10 +91,10 @@
 	{
 		
 
-		$request_name=    @$_POST['request_name'];
-		$request_emailid= @$_POST['request_emailid'];
-		$request_gender=  @$_POST['request_gender'];
-		$phonenumber=     @$_POST['phonenumber'];
+		$request_name=    $_POST['request_name'];
+		$request_emailid= $_POST['request_emailid'];
+		$request_gender=  $_POST['request_gender'];
+		$phonenumber=     $_POST['phonenumber'];
 
 		$conn = connection();
 
@@ -491,10 +491,10 @@
 	{
 		
 
-	   	$event_name=  @$_POST['update_event_name'];
-	   	$event_date=  @$_POST['update_event_date'];
-	   	$event_venue= @$_POST['update_event_venue'];
-	   	$event_id=    @$_POST["update_event_id"];
+	   	$event_name=  $_POST['update_event_name'];
+	   	$event_date=  $_POST['update_event_date'];
+	   	$event_venue= $_POST['update_event_venue'];
+	   	$event_id=    $_POST["update_event_id"];
 		
 		$conn = connection();
 
@@ -517,7 +517,7 @@
 	{
 		
 
-		$event_id= @$_POST["update_event_id"];
+		$event_id= $_POST["update_event_id"];
 		$conn = connection();
 
 		$sql = "DELETE FROM new_event
