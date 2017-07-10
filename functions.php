@@ -153,7 +153,7 @@
 			$uniquecode=md5(uniqid(rand()));
 			$encryptuniquecode=base64_encode($uniquecode);
 			
-			echo "<a target='_blank' href='http://localhost/Internship%20RSVP/rsvp_confirmation_page.php/?passkey=$encryptuniquecode'>CLICK TO RSVP</a>";
+			echo "<a target='_blank' href='rsvp_confirmation_page.php/?passkey=$encryptuniquecode'>CLICK TO RSVP</a>";
 			$sql="UPDATE new_guests SET random_token='$uniquecode' WHERE guest_emailid='$your_email'";
 			mysqli_query($conn, $sql);
 		}
