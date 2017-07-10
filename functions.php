@@ -31,7 +31,7 @@
 		$conn = connection();
 
 
-		$sql = "INSERT INTO new_event (event_name, event_theme, event_date, event_venue)
+		$sql_insert_event = "INSERT INTO new_event (event_name, event_theme, event_date, event_venue)
 				VALUES ('$event_name', '$event_theme', '$event_date', '$event_venue')";
 
 		if ($conn->query($sql) === TRUE) 
@@ -56,24 +56,24 @@
 		
 		$conn = connection();
 		
-		$k="SELECT guest_emailid, phone_number FROM new_guests WHERE guest_emailid='$guest_emailid' OR phone_number='$phone_number' ";
-		$l="SELECT request_emailid, phonenumber FROM new_guests_requests WHERE request_emailid='$guest_emailid' OR phonenumber='$phone_number' ";
-		$resultk=mysqli_query($conn,$k);
-		$resultl=mysqli_query($conn,$l);
+		$sql_select_guests="SELECT guest_emailid, phone_number FROM new_guests WHERE guest_emailid='$guest_emailid' OR phone_number='$phone_number' ";
+		$sql_request_guests="SELECT request_emailid, phonenumber FROM new_guests_requests WHERE request_emailid='$guest_emailid' OR phonenumber='$phone_number' ";
+		$result_select_guests=mysqli_query($conn,$sql_select_guests);
+		$result_request_guests=mysqli_query($conn,$sql_request_guests);
 
-		$m=mysqli_num_rows($resultk);
-		$n=mysqli_num_rows($resultl);
-		if ($m>0)  
+		$sql_select_container=mysqli_num_rows($result_select_guests);
+		$sql_request_container=mysqli_num_rows($result_request_guests);
+		if ($sql_select_container>0)  
 		{	
 			die("This Person is already in our GUEST LIST.");
 		}
 		
-		if ($n>0) 
+		if ($sql_request_container>0) 
 		{
 			die("This person has already REQUESTED for the event");
 		}	
 		
-		$sql = "INSERT INTO new_guests (guest_name, guest_emailid, phone_number, guest_gender,status)
+		$sql_insert_guests = "INSERT INTO new_guests (guest_name, guest_emailid, phone_number, guest_gender,status)
 				VALUES ('$guest_name', '$guest_emailid', '$phone_number', '$guest_gender','Pending')";
 
 		if ($conn->query($sql) === TRUE) 
@@ -98,27 +98,27 @@
 
 		$conn = connection();
 
-		$k="SELECT guest_emailid, phone_number FROM new_guests WHERE guest_emailid='$request_emailid' OR phone_number='$phonenumber' ";
-		$l="SELECT request_emailid, phonenumber FROM new_guests_requests WHERE request_emailid='$request_emailid' OR phonenumber='$phonenumber' ";
-		$resultk=mysqli_query($conn,$k);
-		$resultl=mysqli_query($conn,$l);
+		$sql_select_guests="SELECT guest_emailid, phone_number FROM new_guests WHERE guest_emailid='$request_emailid' OR phone_number='$phonenumber' ";
+		$sql_request_guests="SELECT request_emailid, phonenumber FROM new_guests_requests WHERE request_emailid='$request_emailid' OR phonenumber='$phonenumber' ";
+		$result_select_guests=mysqli_query($conn,$sql_select_guests);
+		$result_request_guests=mysqli_query($conn,$sql_request_guests);
 
-		$m=mysqli_num_rows($resultk);
-		$n=mysqli_num_rows($resultl);
-		if ($m>0)  
+		$sql_select_container=mysqli_num_rows($result_select_guests);
+		$sql_request_container=mysqli_num_rows($result_request_guests);
+		if ($sql_select_container>0)  
 		{	
 			die("This Person is already in our GUEST LIST.");
 		}
 		
-		if ($n>0) 
+		if ($sql_request_container>0) 
 		{
 			die("This person has already REQUESTED for the event");
 		}
 
-		$sql = "INSERT INTO new_guests_requests (request_name, request_emailid, phonenumber, request_gender,status)
+		$sql_insert_guests= "INSERT INTO new_guests_requests (request_name, request_emailid, phonenumber, request_gender,status)
 				VALUES ('$request_name', '$request_emailid', '$phonenumber', '$request_gender','Requested')";
 
-		if ($conn->query($sql) === TRUE) 
+		if ($conn->query($sql_insert_guests) === TRUE) 
 		{
 		    echo '<div class="alert alert-info" role="alert">Thank you for showing interest. We will connect to you soon.</div>';
 		} 
@@ -133,19 +133,21 @@
 	{
 		$conn = connection();
 		
-		$k="SELECT * FROM new_guests WHERE guest_emailid='$your_email'";
-		$result=mysqli_query($conn,$k);
-		$p=mysqli_num_rows($result);
+		$your_email=$_POST['user_email'];
+
+		$sql_select_guests="SELECT * FROM new_guests WHERE guest_emailid='$your_email'";
+		$result_select_guests=mysqli_query($conn,$sql_select_guests);
+		$sql_select_container=mysqli_num_rows($result_select_guests);
 		
-		$l="SELECT * FROM new_guests WHERE status='Confirm' AND guest_emailid='$your_email'";
-		$result1=mysqli_query($conn,$l);
-		$m=mysqli_num_rows($result1);
-		if ($m>0) 
+		$sql_confirm_guests="SELECT * FROM new_guests WHERE status='Confirm' AND guest_emailid='$your_email'";
+		$result_confirm_guests=mysqli_query($conn,$sql_confirm_guests);
+		$sql_confirm_container=mysqli_num_rows($result_confirm_guests);
+		if ($sql_confirm_container>0) 
 		{
 			die("YOU ARE ALREADY CONFIRMED IN OUR GUEST LIST. THANK YOU!!");
 		}
 
-		if ($p>0) 
+		if ($sql_select_container>0) 
 		{
 			$row= $result->fetch_assoc();
 			$uniquecode=md5(uniqid(rand()));
