@@ -141,6 +141,7 @@
 		$sql_confirm_guests="SELECT * FROM new_guests WHERE status='Confirm' AND guest_emailid='$your_email'";
 		$result_confirm_guests=mysqli_query($conn,$sql_confirm_guests);
 		$sql_confirm_container=mysqli_num_rows($result_confirm_guests);
+		$host=$_SERVER['HTTP_HOST'];
 		if ($sql_confirm_container>0) 
 		{
 			return("YOU ARE ALREADY CONFIRMED IN OUR GUEST LIST. THANK YOU!!");
@@ -152,7 +153,7 @@
 			$uniquecode=md5(uniqid(rand()));
 			$encryptuniquecode=base64_encode($uniquecode);
 			
-			echo "<a target='_blank' href='http://localhost/CommonRsvp/Internship_thdc/rsvp_confirmation_page.php/?passkey=$encryptuniquecode'>CLICK TO RSVP</a>";
+			echo "<a target='_blank' href='rsvp_confirmation_page.php?passkey=$encryptuniquecode'>CLICK TO RSVP</a>";
 			$sql="UPDATE new_guests SET random_token='$uniquecode' WHERE guest_emailid='$your_email'";
 			mysqli_query($conn, $sql);
 		}

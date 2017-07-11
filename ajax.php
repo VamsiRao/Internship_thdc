@@ -11,6 +11,7 @@ if (isset($_POST["action"]))
 								break;
 		
 		case 'update_details':  update_details();
+				
 								break;
 								
 		case 'requests':        requests();
