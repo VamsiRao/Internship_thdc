@@ -1,8 +1,7 @@
 <?php
 
 
-	function connection()
-	{
+	
 		$servername = "localhost";
 		$username = "root";
 		$password = "";
@@ -14,27 +13,26 @@
 		    return("Connection failed: " . $conn->connect_error);
 		} 
 
-		return $conn;
-
-	}
+		
 
 	function events()
 	{
 		
+		global $conn;
 
-	   	$event_name=  $_POST['event_name'];
-	   	$event_theme= $_POST['event_theme'];
-	   	$event_date=  $_POST['event_date'];
-	   	$event_venue= $_POST['event_venue'];
-
-
-		$conn = connection();
+	   	$event_name= mysqli_real_escape_string($conn, $_POST['event_name']);
+	   	
+	   	$event_date= mysqli_real_escape_string($conn, $_POST['event_date']);
+	   	$event_venue=mysqli_real_escape_string($conn, $_POST['event_venue']);
 
 
-		$sql_insert_event = "INSERT INTO new_event (event_name, event_theme, event_date, event_venue)
-				VALUES ('$event_name', '$event_theme', '$event_date', '$event_venue')";
+		
 
-		if ($conn->query($sql) === TRUE) 
+
+		$sql_insert_event = "INSERT INTO new_event (event_name, event_date, event_venue)
+				VALUES ('$event_name',  '$event_date', '$event_venue')";
+
+		if ($conn->query($sql_insert_event) === TRUE) 
 		{
 		    echo '<div class="alert alert-info" role="alert">"New Event has been successfully added."</div>';
 		} 
@@ -48,13 +46,14 @@
 
 	function guest_details()
 	{
+		global $conn ;
+
+		$guest_name=   mysqli_real_escape_string($conn, $_POST['guest_name']);
+		$guest_emailid=	 mysqli_real_escape_string($conn,$_POST['guest_emailid']);
+		$phone_number=  mysqli_real_escape_string($conn,$_POST['phone_number']);
+		$guest_gender=  mysqli_real_escape_string($conn,$_POST['guest_gender']);
 		
-		$guest_name=    $_POST['guest_name'];
-		$guest_emailid= $_POST['guest_emailid'];
-		$phone_number=  $_POST['phone_number'];
-		$guest_gender=  $_POST['guest_gender'];
 		
-		$conn = connection();
 		
 		$sql_select_guests="SELECT guest_emailid, phone_number FROM new_guests WHERE guest_emailid='$guest_emailid' OR phone_number='$phone_number' ";
 		$sql_request_guests="SELECT request_emailid, phonenumber FROM new_guests_requests WHERE request_emailid='$guest_emailid' OR phonenumber='$phone_number' ";
@@ -90,13 +89,13 @@
 	function requests()
 	{
 		
+		global $conn;
+		$request_name=     mysqli_real_escape_string($conn,$_POST['request_name']);
+		$request_emailid=  mysqli_real_escape_string($conn,$_POST['request_emailid']);
+		$request_gender=  mysqli_real_escape_string($conn, $_POST['request_gender']);
+		$phonenumber=     mysqli_real_escape_string($conn, $_POST['phonenumber']);
 
-		$request_name=    $_POST['request_name'];
-		$request_emailid= $_POST['request_emailid'];
-		$request_gender=  $_POST['request_gender'];
-		$phonenumber=     $_POST['phonenumber'];
-
-		$conn = connection();
+		
 
 		$sql_select_guests="SELECT guest_emailid, phone_number FROM new_guests WHERE guest_emailid='$request_emailid' OR phone_number='$phonenumber' ";
 		$sql_request_guests="SELECT request_emailid, phonenumber FROM new_guests_requests WHERE request_emailid='$request_emailid' OR phonenumber='$phonenumber' ";
@@ -131,9 +130,9 @@
 
 	function update_details()
 	{
-		$conn = connection();
+		global $conn; 
 		
-		$your_email=$_POST['user_email'];
+		$your_email= mysqli_real_escape_string($conn,$_POST['user_email']);
 
 		$sql_select_guests="SELECT * FROM new_guests WHERE guest_emailid='$your_email'";
 		$result_select_guests=mysqli_query($conn,$sql_select_guests);
@@ -153,7 +152,7 @@
 			$uniquecode=md5(uniqid(rand()));
 			$encryptuniquecode=base64_encode($uniquecode);
 			
-			echo "<a target='_blank' href='rsvp_confirmation_page.php/?passkey=$encryptuniquecode'>CLICK TO RSVP</a>";
+			echo "<a target='_blank' href='http://localhost/CommonRsvp/Internship_thdc/rsvp_confirmation_page.php/?passkey=$encryptuniquecode'>CLICK TO RSVP</a>";
 			$sql="UPDATE new_guests SET random_token='$uniquecode' WHERE guest_emailid='$your_email'";
 			mysqli_query($conn, $sql);
 		}
@@ -166,7 +165,7 @@
 
 	function rsvpconfirm()
 	{
-		$conn = connection();
+		global $conn;
 		$id_guest=$_POST['guestid'];	
 		$updatestatus=" UPDATE new_guests
 						SET status='Confirm'
@@ -183,7 +182,7 @@
 
 	function show_events()
 	{
-		$conn = connection();
+	    global $conn;
 
 		$sql = "SELECT event_name, event_theme, event_date, event_venue FROM new_event ORDER BY `event_date` asc limit 1";
 		$result = $conn->query($sql);
@@ -205,20 +204,15 @@
 
 	function rsvp()
 	{
-		$conn1 = connection();
+		global $conn;
 		$output = ""; 
-		$procedure = "
-						CREATE PROCEDURE selectguest()
-						BEGIN  
-							SELECT * FROM new_guests ORDER BY guestid desc;
-						END;
-						";
-			if(mysqli_query($conn1, "drop PROCEDURE IF EXISTS selectguest"))
-			{
-				if (mysqli_query($conn1,$procedure)) 
+		$procedure = "SELECT * FROM new_guests ORDER BY guestid desc";
+						
+			
+				if (mysqli_query($conn,$procedure)) 
 				{
 					$query ="CALL selectguest()";
-					$result1= mysqli_query($conn1,$query);
+					$result1= mysqli_query($conn,$query);
 					$output .='<table class="table table-hover table-striped table-bordered table-responsive">';
 					$output .='<thead>';
 					$output .=	'<tr>';
@@ -266,12 +260,12 @@
 						$output .='</table>';
 						echo $output;
 				}
-			}						
+									
 	}
 
 	function submit_requests()
 	{
-		$conn1 = connection();
+		global $conn;
 		$output = ''; 
 		$procedure = "
 						CREATE PROCEDURE select_requested_guest()
@@ -280,12 +274,12 @@
 						END;
 					";
 			
-			if(mysqli_query($conn1, "drop PROCEDURE IF EXISTS select_requested_guest"))
+			if(mysqli_query($conn, "drop PROCEDURE IF EXISTS select_requested_guest"))
 			{
-				if (mysqli_query($conn1,$procedure)) 
+				if (mysqli_query($conn,$procedure)) 
 				{
 					$query ="CALL select_requested_guest()";
-					$result3= mysqli_query($conn1,$query);
+					$result3= mysqli_query($conn,$query);
 					$output .='
 							<table class="table table-hover table-striped
 							table-bordered table-responsive">
@@ -350,12 +344,12 @@
 								echo $output;
 							}
 						}						
-					$conn1->close();
+					$conn->close();
 	}
 	
 	function showallevents()
 	{
-		$conn = connection();
+		global $conn;
 		$output='';
 		if ($conn->connect_error) 
 		{
@@ -414,40 +408,40 @@
 
 	if(isset($_POST["acton"])=="approve")
 	{
-		$conn1 = connection();
-
-		$request_id= mysqli_real_escape_string($conn1, $_POST["request_id"]);	
+		global $conn;
+		
+		$request_id= mysqli_real_escape_string($conn, $_POST["request_id"]);	
 		$result5= "SELECT * FROM new_guests_requests WHERE request_id='$request_id'";
-		$result6= mysqli_query($conn1, $result5);
+		$result6= mysqli_query($conn, $result5);
 		$row= mysqli_fetch_assoc($result6);
 		
-		$name= $row['request_name'];
-		$email= $row['request_emailid'];
-		$phone= $row['phonenumber'];
-		$gender= $row['request_gender'];
+		$name=  mysqli_real_escape_string($conn,$row['request_name']);
+		$email=  mysqli_real_escape_string($conn,$row['request_emailid']);
+		$phone= mysqli_real_escape_string($conn,$row['phonenumber']);
+		$gender=  mysqli_real_escape_string($conn,$row['request_gender']);
 
 		$result7= "INSERT INTO new_guests(guest_name, guest_emailid, phone_number, guest_gender, status)
 					VALUES('$name', '$email', '$phone', '$gender', 'Confirm')";
-		if(mysqli_query($conn1, $result7)===TRUE)
+		if(mysqli_query($conn, $result7)===TRUE)
 		{
 			echo $name."  REQUEST ACCEPTED";
 			$result8= "DELETE FROM new_guests_requests WHERE request_id='$request_id'";
-			mysqli_query($conn1, $result8);
+			mysqli_query($conn, $result8);
 		}
 		else
 		{
-			echo "Error: " .$result7."<br>". $conn1->error;
+			echo "Error: " .$result7."<br>". $conn->error;
 		}
-		$conn1->close();
+		$conn->close();
 	}
 
 	function reject_guest()
 	{
-		$conn1 = connection();
-		
-		$request_id= mysqli_real_escape_string($conn1, $_POST["request_id"]);	
+		global $conn;
+				
+		$request_id= mysqli_real_escape_string($conn, $_POST["request_id"]);	
 		$results=" SELECT status FROM new_guests_requests WHERE status='Rejected' AND request_id='$request_id'";
-		$confirm=mysqli_query($conn1, $results);
+		$confirm=mysqli_query($conn, $results);
 		if (mysqli_num_rows($confirm)>0) 
 		{
 			return("ALREADY REJECTED");
@@ -458,21 +452,21 @@
 						SET status='Rejected' 
 						WHERE request_id='$request_id'";
 			
-			if(mysqli_query($conn1, $result9)===TRUE)
+			if(mysqli_query($conn, $result9)===TRUE)
 			{
 				echo "REJECTED";
 			}	
 			else
 			{
-				echo "Error: " .$result9."<br>". $conn1->error;
+				echo "Error: " .$result9."<br>". $conn->error;
 			}
 		}
-		$conn1->close();
+		$conn->close();
 	}
 
 	function extract_event_data()
 	{
-		$conn = connection();
+		global $conn;		
 		$event_id=$_POST["event_id"];
 		$sql = "SELECT * FROM new_event WHERE event_id='$event_id' ";
 		$result = $conn->query($sql);
@@ -492,13 +486,14 @@
 	function update_event_data()
 	{
 		
+		global $conn;
 
-	   	$event_name=  $_POST['update_event_name'];
-	   	$event_date=  $_POST['update_event_date'];
-	   	$event_venue= $_POST['update_event_venue'];
-	   	$event_id=    $_POST["update_event_id"];
+	   	$event_name=  mysqli_real_escape_string($conn,$_POST['update_event_name']);
+	   	$event_date=  mysqli_real_escape_string($conn,$_POST['update_event_date']);
+	   	$event_venue= mysqli_real_escape_string($conn,$_POST['update_event_venue']);
+	   	$event_id=    mysqli_real_escape_string($conn,$_POST["update_event_id"]);
 		
-		$conn = connection();
+		
 
 		$sql = "UPDATE new_event
 				SET event_name='$event_name',event_date= '$event_date',event_venue= '$event_venue'
@@ -518,9 +513,9 @@
 	function delete_event()
 	{
 		
-
+		global $conn;
 		$event_id= $_POST["update_event_id"];
-		$conn = connection();
+		
 
 		$sql = "DELETE FROM new_event
 				WHERE event_id='$event_id' ";

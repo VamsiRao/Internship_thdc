@@ -34,11 +34,11 @@
 		<div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
 			<ul class="navbar-nav">
 				<li class="nav-item active">
-					<a role="button" class="btn btn-outline-warning" href="guests_control_page.php" style="font-family: 'Oswald'; font-size: 17px;">GUESTS<span class="sr-only">(current)</span>
+					<a role="button" class="btn btn-outline-warning" href="http://localhost/CommonRsvp/Internship_thdc/guests_control_page.php" style="font-family: 'Oswald'; font-size: 17px;">GUESTS<span class="sr-only">(current)</span>
 					</a>
 				</li>&nbsp;
 				<li class="nav-item active">
-					<a role="button" class="btn btn-outline-warning" href="events_control_page.php" style="font-family: 'Oswald'; font-size: 17px;">EVENTS<span class="sr-only"></span>
+					<a role="button" class="btn btn-outline-warning" href="http://localhost/CommonRsvp/Internship_thdc/events_control_page.php" style="font-family: 'Oswald'; font-size: 17px;">EVENTS<span class="sr-only"></span>
 					</a>
 				</li>
 			</ul>
@@ -57,7 +57,7 @@
 						<h1 style="font-family: 'Oswald'; font-size: 15px; color: bisque; padding-top: 15px;">Coming Up...</h1>
 						<div style="color: white;">
 						<?php
-							require("functions.php");
+							require_once("functions.php");
 							show_events();
 						?>
 						</div>

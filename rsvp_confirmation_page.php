@@ -22,11 +22,11 @@
 		<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<a class="navbar-brand" href="#""><img src="http://localhost/Internship%20RSVP/RSVP_IMAGES/logo.png" width="180" height="45" class="d-inline-block align-top" alt=""></a>
+		<a class="navbar-brand" href="#""><img src="RSVP_IMAGES/logo.png" width="180" height="45" class="d-inline-block align-top" alt=""></a>
 		<div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
 			<ul class="navbar-nav">
 				<li class="nav-item active">
-					<a role="button" class="btn btn-outline-warning" href="http://localhost/Internship%20RSVP/index.php" style="font-family: 'Oswald'; font-size: 17px;">
+					<a role="button" class="btn btn-outline-warning" href="http://localhost/CommonRsvp/Internship_thdc/index.php" style="font-family: 'Oswald'; font-size: 17px;">
 						<i class="fa fa-home" aria-hidden="true"></i>&nbsp;HOME<span class="sr-only">(current)</span>
 					</a>
 				</li>
@@ -72,7 +72,7 @@
             $output .='<center><h4 class="card-title text-danger">WARNING!</h4>
                             <p class="card-text text-warning">ONLY SPECIFIC USERS ARE AUTHORIZED TO THIS PAGE. THANK YOU<p>
                             <div class="card-block">
-                                   <a class="btn btn-success" href="http://localhost/Internship%20RSVP/index.php">Get Back</a>
+                                   <a class="btn btn-success" href="http://localhost/CommonRsvp/Internship_thdc/index.php">Get Back</a>
                             </div>
                         </center>';            
         }
@@ -83,7 +83,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 </body>
-		<script type="text/javascript" src="http://localhost/Internship%20RSVP/main.js"></script>
+		<script type="text/javascript" src="http://localhost/CommonRsvp/Internship_thdc/main.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </html>
 
@@ -97,7 +97,7 @@
 			$.ajax(
 			{
 				type: "POST",
-				url: "http://localhost/Internship%20RSVP/ajax.php",
+				url: "http://localhost/CommonRsvp/Internship_thdc/ajax.php",
 				data: dataString,
 				success: function(result)
 				{
