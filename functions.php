@@ -11,7 +11,7 @@
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		if ($conn->connect_error) 
 		{
-		    die("Connection failed: " . $conn->connect_error);
+		    return("Connection failed: " . $conn->connect_error);
 		} 
 
 		return $conn;
@@ -65,24 +65,24 @@
 		$sql_request_container=mysqli_num_rows($result_request_guests);
 		if ($sql_select_container>0)  
 		{	
-			die("This Person is already in our GUEST LIST.");
+			return("This Person is already in our GUEST LIST.");
 		}
 		
 		if ($sql_request_container>0) 
 		{
-			die("This person has already REQUESTED for the event");
+			return("This person has already REQUESTED for the event");
 		}	
 		
 		$sql_insert_guests = "INSERT INTO new_guests (guest_name, guest_emailid, phone_number, guest_gender,status)
 				VALUES ('$guest_name', '$guest_emailid', '$phone_number', '$guest_gender','Pending')";
 
-		if ($conn->query($sql) === TRUE) 
+		if ($conn->query($sql_insert_guests) === TRUE) 
 		{
 		    echo '<div class="alert alert-info" role="alert">"New Guest has been successfully added."</div>';	
 		} 
 		else 
 		{
-		    return "Error:"  . $sql . "<br>" . $conn->error;
+		    return "Error:"  . $sql_insert_guests . "<br>" . $conn->error;
 		}
 		$conn->close();	
 	}
@@ -107,12 +107,12 @@
 		$sql_request_container=mysqli_num_rows($result_request_guests);
 		if ($sql_select_container>0)  
 		{	
-			die("This Person is already in our GUEST LIST.");
+			return("This Person is already in our GUEST LIST.");
 		}
 		
 		if ($sql_request_container>0) 
 		{
-			die("This person has already REQUESTED for the event");
+			return("This person has already REQUESTED for the event");
 		}
 
 		$sql_insert_guests= "INSERT INTO new_guests_requests (request_name, request_emailid, phonenumber, request_gender,status)
@@ -144,12 +144,12 @@
 		$sql_confirm_container=mysqli_num_rows($result_confirm_guests);
 		if ($sql_confirm_container>0) 
 		{
-			die("YOU ARE ALREADY CONFIRMED IN OUR GUEST LIST. THANK YOU!!");
+			return("YOU ARE ALREADY CONFIRMED IN OUR GUEST LIST. THANK YOU!!");
 		}
 
 		if ($sql_select_container>0) 
 		{
-			$row= $result->fetch_assoc();
+			$row= $result_confirm_guests->fetch_assoc();
 			$uniquecode=md5(uniqid(rand()));
 			$encryptuniquecode=base64_encode($uniquecode);
 			
@@ -359,7 +359,7 @@
 		$output='';
 		if ($conn->connect_error) 
 		{
-		    die("Connection failed: " . $conn->connect_error);
+		    return("Connection failed: " . $conn->connect_error);
 		} 
 
 		$sql = "SELECT * FROM new_event ORDER BY event_date asc";
@@ -450,7 +450,7 @@
 		$confirm=mysqli_query($conn1, $results);
 		if (mysqli_num_rows($confirm)>0) 
 		{
-			die("ALREADY REJECTED");
+			return("ALREADY REJECTED");
 		}
 		else
 		{

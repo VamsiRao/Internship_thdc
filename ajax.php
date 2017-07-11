@@ -43,5 +43,9 @@ if (isset($_POST["action"]))
 		default:				echo "Invalid";
 								break;
 	}
+} else {
+	
+		conole.error('No Post Action Received');
+		return;
 }
 ?>
